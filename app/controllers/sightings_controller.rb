@@ -1,14 +1,19 @@
 class SightingsController < ApplicationController
-    belongs_to :animal
+    
 
     def index
         sightings = Sighting.where(date: params[:start_date]..params[:end_date])
         render json: sightings
     end
 
+
+    def show
+        sighting = Sighting.find([params[:id]])
+        render json: sighting
+    end
+
     def create
-        animal = Animal.find(params[:animal_id])
-        sighting = Sighting.create(sighting_params)
+        sighting = Animal.find(params[:id]).sighting.create(sighting_params)
         if sighting.valid?
             render json: sighting
         else 
@@ -17,6 +22,17 @@ class SightingsController < ApplicationController
     end
 
 
+
+    
+    def update
+        sighting = Sighting.find(params[:id])
+        sighting.update(sighting_params)
+        if sighting.valid?
+            render json: sighting
+          else
+            render json: sighting.errors     
+          end
+    end
     
     
     

@@ -1,18 +1,18 @@
 class AnimalsController < ApplicationController
-    has_many :sighting
+    
     def index
         animals = Animal.all
         render json: animals
     end
 
     def show
-        animal = Animal.find([params[:id]])
+        animal = Animal.find(params[:id]).as_json(include: :sightings)
         render  json: animal
     end
 
     def update
         animal = Animal.find(params[:id])
-        Animal.update(animal_params);
+        animal.update(animal_params);
           if animal.valid?
             render json: animal
           else
